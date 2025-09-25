@@ -12,17 +12,17 @@ import java.util.Properties;
 public class ml_and_matlab {
 
     @Test(priority = 1)
-    public void ml_and_matlab() {
+    public void ml_and_matlab_Status() {
 
         String vmIpAddress = "172.20.23.157";
         String username = "appUser";
         String password = "Brain@123";
-        String containerId = "4939ae7351e3";
+        String containerName = "ml_with_matlab";  
 
-        System.out.println("ml_and_matlab Docker ID = " + containerId);
+        System.out.println("ml_and_matlab Docker Name = " + containerName);
 
-        if (containerId.isEmpty()) {
-            System.out.println("Container ID is required.");
+        if (containerName.isEmpty()) {
+            System.out.println("Container name is required.");
             return;
         }
 
@@ -33,9 +33,9 @@ public class ml_and_matlab {
             session.setConfig("StrictHostKeyChecking", "no");
             session.connect();
 
-            // Execute the docker inspect command to check the container's status
+            // ✅ Inspect container by name
             ChannelExec channel = (ChannelExec) session.openChannel("exec");
-            channel.setCommand("docker inspect --format='{{.State.Status}}' " + containerId);
+            channel.setCommand("docker inspect --format='{{.State.Status}}' " + containerName);
             channel.setInputStream(null);
             channel.setErrStream(System.err);
             BufferedReader reader = new BufferedReader(new InputStreamReader(channel.getInputStream()));
@@ -56,7 +56,7 @@ public class ml_and_matlab {
 
             // If container is not running, send alert
             if (!isRunning) {
-                sendEmailAlert("Hi,\n\n🚨 This is ml_and_matlab Docker. I am currently down. Kindly restart the container at your earliest convenience.");
+                sendEmailAlert("Hi,\n\n🚨 This is ml_with_matlab Docker. I am currently down. Kindly restart the container at your earliest convenience.");
                 assert false : "Container is not in the expected state.";
             }
 
@@ -82,7 +82,7 @@ public class ml_and_matlab {
             "gayathri@htic.iitm.ac.in"
         };
 
-        String subject = "Docker Container Alert - ml_and_matlab";
+        String subject = "Docker Container Alert - ml_with_matlab";
         final String username = "automationsoftware25@gmail.com";
         final String password = "wjzcgaramsqvagxu"; // App-specific password
 
@@ -122,4 +122,3 @@ public class ml_and_matlab {
         }
     }
 }
-
